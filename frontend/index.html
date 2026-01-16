@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neo Notes</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="logo-icon">📝</span>
+        <h1>Neo Notes</h1>
+      </div>
+      
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Search notes...">
+      </div>
+
+      <nav class="categories">
+        <h3>Categories</h3>
+        <button class="cat-btn active" data-category="all">📋 All Notes</button>
+        <button class="cat-btn" data-category="personal">💜 Personal</button>
+        <button class="cat-btn" data-category="work">💼 Work</button>
+        <button class="cat-btn" data-category="ideas">💡 Ideas</button>
+        <button class="cat-btn" data-category="general">📌 General</button>
+      </nav>
+
+      <div class="stats">
+        <span id="noteCount">0 notes</span>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <h2 id="currentCategory">All Notes</h2>
+        <button class="btn-add" onclick="openModal()">+ New Note</button>
+      </header>
+
+      <div class="notes-grid" id="notesGrid">
+        <!-- Notes will be rendered here -->
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        <span class="empty-icon">📭</span>
+        <p>No notes yet. Create your first note!</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal for Add/Edit -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">New Note</h3>
+        <button class="btn-close" onclick="closeModal()">×</button>
+      </div>
+      
+      <form id="noteForm">
+        <input type="hidden" id="noteId">
+        
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="titleInput" placeholder="Note title..." required>
+        </div>
+
+        <div class="form-group">
+          <label>Content</label>
+          <textarea id="textInput" placeholder="Write your note..." rows="5" required></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="categoryInput">
+              <option value="general">📌 General</option>
+              <option value="personal">💜 Personal</option>
+              <option value="work">💼 Work</option>
+              <option value="ideas">💡 Ideas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Color</label>
+            <div class="color-picker">
+              <button type="button" class="color-btn active" data-color="#ffffff" style="background: #ffffff"></button>
+              <button type="button" class="color-btn" data-color="#fff3cd" style="background: #fff3cd"></button>
+              <button type="button" class="color-btn" data-color="#d1ecf1" style="background: #d1ecf1"></button>
+              <button type="button" class="color-btn" data-color="#d4edda" style="background: #d4edda"></button>
+              <button type="button" class="color-btn" data-color="#f8d7da" style="background: #f8d7da"></button>
+              <button type="button" class="color-btn" data-color="#e2d9f3" style="background: #e2d9f3"></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Save Note</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
