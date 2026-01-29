@@ -14,6 +14,9 @@ const noteForm = document.getElementById("noteForm");
 const searchInput = document.getElementById("searchInput");
 const noteCount = document.getElementById("noteCount");
 const currentCategoryTitle = document.getElementById("currentCategory");
+const aiInput = document.getElementById("aiInput");
+const aiSubmit = document.getElementById("aiSubmit");
+const aiResponse = document.getElementById("aiResponse");
 
 // ============ FETCH NOTES ============
 async function fetchNotes() {
@@ -191,6 +194,41 @@ function updateStats() {
   noteCount.textContent = `${count} note${count !== 1 ? "s" : ""}`;
 }
 
+// ============ AI COMMAND ============
+function setAiStatus(message, isError = false) {
+  if (!aiResponse) return;
+  aiResponse.textContent = message;
+  aiResponse.classList.toggle("error", isError);
+}
+
+async function runAiCommand() {
+  if (!aiInput || !aiSubmit) return;
+  const message = aiInput.value.trim();
+  if (!message) return;
+
+  aiSubmit.disabled = true;
+  setAiStatus("Working...");
+
+  try {
+    const res = await fetch(`${API_URL}/agent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "AI request failed.");
+    }
+    setAiStatus(data.reply || "Done.");
+    aiInput.value = "";
+    await fetchNotes();
+  } catch (error) {
+    setAiStatus(error.message || "AI request failed.", true);
+  } finally {
+    aiSubmit.disabled = false;
+  }
+}
+
 // ============ EVENT LISTENERS ============
 
 // Form submit
@@ -238,6 +276,20 @@ document.querySelectorAll(".color-btn").forEach(btn => {
 searchInput.addEventListener("input", () => {
   renderNotes();
 });
+
+// AI command
+if (aiSubmit && aiInput) {
+  aiSubmit.addEventListener("click", () => {
+    runAiCommand();
+  });
+
+  aiInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      runAiCommand();
+    }
+  });
+}
 
 // Close modal on outside click
 modalOverlay.addEventListener("click", (e) => {
